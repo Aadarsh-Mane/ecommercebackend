@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const userSchema=mongoose.Schema({
+const UserSchema=mongoose.Schema({
     name:{
     type: String,
     required: true,
@@ -15,7 +15,7 @@ const userSchema=mongoose.Schema({
         required: true,
         validate:{
             validator:(value)=>{
-                const reg='^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$'
+                const reg=/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
                  return value.match(reg);
             },
             mes:"please enter a valid email"
@@ -77,6 +77,6 @@ const userSchema=mongoose.Schema({
 
     
 })
-userSchema.index({ email: 1, phone: 1 }, { unique: true });
+UserSchema.index({ email: 1, phone: 1 }, { unique: true });
 
-export default mongoose.model("User",userSchema);
+export default mongoose.model("User",UserSchema);
