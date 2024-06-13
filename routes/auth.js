@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register } from '../controllers/auth.js';
+import { forgotPassword, login, register, verifyToken } from '../controllers/auth.js';
 import { body } from 'express-validator';
 const validateUser=[
     body('name').not().isEmpty().withMessage('Please enter name'),
@@ -11,8 +11,8 @@ const authRouter =express.Router();
 
 authRouter.post('/login',login)
 authRouter.post('/register',validateUser,register)
-authRouter.post('/register',validateUser,ver)
-authRouter.post('/forgot-password',)
+authRouter.post('/register',validateUser,verifyToken)
+authRouter.post('/forgot-password',forgotPassword)
 authRouter.post('/verify-otp',)
 authRouter.post('/reset-password',)
 export default authRouter

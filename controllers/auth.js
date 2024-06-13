@@ -4,6 +4,7 @@ import tokenSchema from "../models/token.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import token from "../models/token.js"
+import { sendMail } from "../helpers/email_sender.js"
 
 const ACCES_TOKEN="123"
 const REFRES_TOKEN="1234"
@@ -102,4 +103,57 @@ export const verifyToken = async(req,res)=>{
     } catch (error) {
         
     }
+}
+
+export const forgotPassword=async(req,res)=>{
+    try {
+        
+        const {email}=req.body
+        const user=await UserSchema.findOne({email})
+        
+        if(!user){
+            return res.json({message:"user not ffound"})
+        }
+        
+        const otp=Math.floor(1000 + Math.random()*9000);
+        user.resetPasswordOtp=otp;
+        user.resetPasswordOtpExpiration=Date.now() + 600000
+        
+        await user.save()
+        
+        const response=await sendMail(
+            email,
+            'Password reset otp',
+            `your otp for password resetis ${otp}`
+            )
+        console.log("helo")
+
+    return res.status(200).json({message:response})
+        
+        
+    } catch (error) {
+        return res.json({type:error.name,message:error.message})
+    }
+
+}
+
+export const verifyPasswordResetOtp = async(req, res) => {
+     
+try {
+    // const user= await UserSchema.fin
+    const {email,otp}=req.body;
+    const user =await UserSchema.findOne({email})
+    if(!user){
+        res.status(404).json({message:"User not found"})
+
+    }
+    if(user.resetPasswordOtp!== +otp || Date.now()>user.resetPasswordOtpExpiration){
+        return res.status(401).json({message:"invalid or expired password"})
+    }
+
+    user.resetPasswordOtp=undefined
+} catch (error) {
+    
+}
+
 }
