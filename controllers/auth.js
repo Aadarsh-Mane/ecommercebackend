@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import token from "../models/token.js"
 import { sendMail } from "../helpers/email_sender.js"
+import user from "../models/user.js"
 
 const ACCES_TOKEN="123"
 const REFRES_TOKEN="1234"
@@ -151,9 +152,34 @@ try {
         return res.status(401).json({message:"invalid or expired password"})
     }
 
-    user.resetPasswordOtp=undefined
+    user.resetPasswordOtp=1
+    user.resetPasswordOtpExpiration=undefined
+    await user.save()
+    return res.json({message:"otp confirmed successfully"})
 } catch (error) {
     
 }
 
+}
+
+export const resetPassword=async(req, res)=>{
+    try {
+        
+        
+        const {email, newPassword} = req.body
+    
+    const user=await UserSchema.findOne({email})
+
+if(!user) return res.status(404).json({message:"User not found"})
+if(user.resetPasswordOtp!==1) {
+    return res.status(401).json({message:"confirmed otp before resetting  password"})
+  }
+
+user.passwordHash=bcrypt.hashSync(newPassword,8)
+user.resetPasswordOtp=undefined
+await user.save()
+return res.status(200).json({message:'password reset'})
+} catch (error) {
+    res.status(500).json({message:error.message})
+}
 }
