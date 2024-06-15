@@ -19,12 +19,15 @@ app.use(bodyParser.json())
 app.use(morgan('tiny'))
 app.use(cors())
 app.options('*',cors())
-app.use(authjwt)
+app.use(authjwt())
 app.use(erroHandler)
-app.use(`${API}/`,authRouter)
 // app.use(`${API}/users`,)
+app.get('/',(req, res) => {
+    console.log("hello world")
+})
+app.use(`${API}/`,authRouter)
 app.get(`${API}/users`, (req, res)=>{
-    console.log("heelo")
+    console.log(req)
     return res.json([{name:'Paul',org:'dbsteach',age:150}])
 })
 

@@ -80,7 +80,7 @@ return res.status(404).json({message:"User not found"})
 
    user.passwordHash=undefined;
    return res.json({
-    ...user,accessToken
+    ...user._doc,accessToken
    })
 } catch (error) {
     res.status(500).json({type:error.name,message:error.message})
