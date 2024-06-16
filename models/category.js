@@ -7,7 +7,8 @@ const categorySchema=mongoose.Schema({
         required:true,
     },   
     color:{type:String,default:'#000000'},
-    image:{type:String,required:true}
+    image:{type:String,required:true},
+    markedForDeletion:{type:Boolean,default:false}
 })
 
 export default  mongoose.model('Category',categorySchema);
