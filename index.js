@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { authjwt } from './middlewares/jwt.js';
 import { erroHandler } from './middlewares/error_handler.js';
+import userRouter from './routes/users.js';
 dotenv.config(); // Load environment variables from .env file
 const app = express()
 const hostname=process.env.HOSTNAME
@@ -26,6 +27,7 @@ app.get('/',(req, res) => {
     console.log("hello world")
 })
 app.use(`${API}/`,authRouter)
+app.use(`${API}/users`,userRouter)
 app.get(`${API}/users`, (req, res)=>{
     console.log(req)
     return res.json([{name:'Paul',org:'dbsteach',age:150}])
