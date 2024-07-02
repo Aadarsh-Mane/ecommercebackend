@@ -7,6 +7,9 @@ const productSchema=mongoose.create({
           required: true,
           trim: true,
         },
+        available:{
+          type:Boolean,
+        },
         description: {
           type: String,
           required: true,
@@ -82,10 +85,10 @@ const productSchema=mongoose.create({
  this.rating=parseFloat((totalRating/this.reviews.length).toFixed(1))
  this.numberOfReviews=this.reviews.length 
 
- }
+}
  next()
     })
 
 productSchema.index()
     
-    export default mongoose.model('Product', productSchema);
+export default mongoose.model('Product', productSchema);
