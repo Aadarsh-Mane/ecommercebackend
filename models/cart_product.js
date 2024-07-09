@@ -38,4 +38,4 @@ cartProductSchema.set("toJSON", {
   virtuals: true,
 });
 
-export default mongoose.model("Order", cartProductSchema);
+export default mongoose.model("cartProduct", cartProductSchema);
